@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <body>
+    <h1>💖 Hello World!</h1>
+    <p>Welcome to your Electron application.</p>
+    <button id="btn">打开新窗口</button>
+    <script>
+      let {ipcRenderer} = require('electron');
+      //监听消息
+      ipcRenderer.on('lc-active',(event,arg)=>{
+        console.log("arg", arg);
+        console.log("event", event);
+      })
+      //发送消息
+      ipcRenderer.send('lc-message',"hello 主进程,我是子进程的消息")
+      // 监听发送给主进程后主进程返回的消息
+      ipcRenderer.on('lc-reply',(event,arg)=>{
+        console.log("arg", arg);
+        console.log("event", event);
+      })
+      let btn = document.querySelector('#btn')
+      btn.addEventListener('click',function(){
+        ipcRenderer.send('openNewWindows',"hello 主进程,开新窗口") //第二个参数可以传可以不传
+      })
+
+    </script>
+  </body>
+</html>
